@@ -21,7 +21,6 @@ CREATE TABLE public.requests
     request_type text NOT NULL,
     workload bigint NOT NULL,
     total_cost real NOT NULL,
-    user_type text NOT NULL,
     owner_id bigint NOT NULL,
     PRIMARY KEY (id)
 );

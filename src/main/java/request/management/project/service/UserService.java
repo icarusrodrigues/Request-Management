@@ -1,5 +1,7 @@
 package request.management.project.service;
 
+import br.com.caelum.stella.validation.CPFValidator;
+import br.com.caelum.stella.validation.InvalidStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import request.management.project.dto.UserDto;
@@ -12,8 +14,19 @@ import request.management.project.repository.UserRepository;
 public class UserService extends CrudService<UserDto, User> {
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CPFValidator cpfValidator;
+
+    @Autowired
     public UserService(GenericMapper<UserDto, User> mapper, IRepository<User, Long> repository) {
         super(mapper, repository);
     }
 
+    @Override
+    public UserDto create(UserDto dto) {
+        cpfValidator.assertValid(dto.getCpf());
+        return super.create(dto);
+    }
 }

@@ -18,14 +18,11 @@ public class Request extends BaseEntity<Long> {
     @NotBlank
     private String area;
 
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
 
-    @NotBlank
     private Integer workload;
 
-    @NotBlank
     private Float totalCost;
 
     @ManyToOne
