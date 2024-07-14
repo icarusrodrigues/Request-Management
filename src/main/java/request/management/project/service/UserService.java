@@ -1,7 +1,6 @@
 package request.management.project.service;
 
 import br.com.caelum.stella.validation.CPFValidator;
-import br.com.caelum.stella.validation.InvalidStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import request.management.project.dto.UserDto;
@@ -14,7 +13,7 @@ import request.management.project.repository.UserRepository;
 public class UserService extends CrudService<UserDto, User> {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     private CPFValidator cpfValidator;
@@ -41,6 +40,9 @@ public class UserService extends CrudService<UserDto, User> {
         dto.setRegistrationNumber(foundUser.getRegistrationNumber());
         dto.setUserType(foundUser.getUserType());
 
+        if (dto.getUsername() == null)
+            dto.setUsername(foundUser.getUsername());
+
         if (dto.getEmail() == null)
             dto.setEmail(foundUser.getEmail());
 
@@ -62,6 +64,23 @@ public class UserService extends CrudService<UserDto, User> {
         if (dto.getRequests() == null)
             dto.setRequests(foundUser.getRequests());
 
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        return mapper.toDto(userRepository.save(mapper.toEntity(dto)));
+    }
+
+    public UserDto findByUsername(String username) {
+        return mapper.toDto(userRepository.findByUsername(username).orElseThrow());
+    }
+
+    public UserDto findByCpf(String cpf) {
+        cpfValidator.assertValid(cpf);
+        return mapper.toDto(userRepository.findByCpf(cpf).orElseThrow());
+    }
+
+    public UserDto findByEmail(String email) {
+        return mapper.toDto(userRepository.findByEmail(email).orElseThrow());
+    }
+
+    public User getUserEntityFindByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow();
     }
 }

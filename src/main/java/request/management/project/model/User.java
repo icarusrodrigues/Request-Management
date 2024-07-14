@@ -21,6 +21,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity<Long> {
     @NotBlank
+    private String username;
+
+    @NotBlank
     private String cpf;
 
     @NotBlank

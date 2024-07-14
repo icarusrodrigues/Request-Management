@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: develop
   application:
     name: Request Management Project
   flyway:
@@ -13,3 +15,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format-sql: true
+
+project:
+  jwtSecret: 818cd42d7c6591cb82c74d27ca9e1d250cca8c7c1d82ff5c6809852284df4cf6a2250961588c8d8c53f24c863c0d31ea96c0e91af6d7cd127461def7174fb03b
+  jwtExpirationMs: 3600000
