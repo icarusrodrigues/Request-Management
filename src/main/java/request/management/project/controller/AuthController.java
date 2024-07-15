@@ -1,7 +1,6 @@
 package request.management.project.controller;
 
 import br.com.caelum.stella.validation.InvalidStateException;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

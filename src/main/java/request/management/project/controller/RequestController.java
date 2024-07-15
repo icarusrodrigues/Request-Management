@@ -2,12 +2,12 @@ package request.management.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import request.management.project.dto.RequestDto;
-import request.management.project.dto.UserDto;
 import request.management.project.exceptions.EmptyReasonException;
 import request.management.project.exceptions.RequestAlreadyApprovedException;
 import request.management.project.exceptions.RequestAlreadyUnapprovedException;
@@ -62,7 +62,6 @@ public class RequestController extends CrudController<RequestDto> {
 
         return super.create(dto);
     }
-
 
     @Override
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TEACHER')")
@@ -138,4 +137,17 @@ public class RequestController extends CrudController<RequestDto> {
             return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), exception.getMessage());
         }
     }
-}
+
+    @GetMapping("/my-requests")
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    public ResponseEntity<?> listTasksByUser(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
+                                             @RequestParam(name = "property", defaultValue = "requestDate") String property) {
+        var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var foundUser = userService.findByUsername(user.getUsername());
+
+        try {
+            return ResponseHandler.generateResponse(ResponseEntity.ok(requestService.listAllByOwner(foundUser, direction, property)), EnumMessage.GET_MESSAGE.message());
+        } catch (PropertyReferenceException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
+        }
+    }}
