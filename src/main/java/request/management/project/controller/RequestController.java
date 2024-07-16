@@ -21,6 +21,7 @@ import request.management.project.service.ICrudService;
 import request.management.project.service.RequestService;
 import request.management.project.service.UserService;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -48,6 +49,18 @@ public class RequestController extends CrudController<RequestDto> {
     public ResponseEntity<?> list(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
                                   @RequestParam(name = "property", defaultValue = "requestDate") String property){
         return super.list(direction, property);
+    }
+
+    @GetMapping("filter")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
+    public ResponseEntity<?> listByStatus(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
+                                          @RequestParam(name = "property", defaultValue = "requestDate") String property,
+                                          @RequestParam(name = "status", defaultValue = "CREATED") List<RequestStatus> statusList){
+        try {
+            return ResponseHandler.generateResponse(ResponseEntity.ok(requestService.listAllByStatus(statusList, direction, property)), EnumMessage.GET_MESSAGE.message());
+        } catch (PropertyReferenceException exception) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
+        }
     }
 
     @Override

@@ -288,6 +288,53 @@
 					"response": []
 				},
 				{
+					"name": "Filter All Requests By Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/requests/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"requests",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "CREATED",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "APPROVED",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "UNAPPROVED",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Requests By Id",
 					"request": {
 						"auth": {

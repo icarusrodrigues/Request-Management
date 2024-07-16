@@ -28,6 +28,7 @@ public class Request extends BaseEntity<Long> {
 
     private Float totalCost;
 
+    @Enumerated(EnumType.STRING)
     private RequestStatus requestStatus;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")

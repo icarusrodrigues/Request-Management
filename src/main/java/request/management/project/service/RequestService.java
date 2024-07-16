@@ -104,4 +104,8 @@ public class RequestService extends CrudService<RequestDto, Request> {
     public List<RequestDto> listAllByOwner(UserDto loggedUser, Sort.Direction direction, String property) {
         return repository.findAllByOwner(userMapper.toEntity(loggedUser), Sort.by(direction, property)).stream().map(mapper::toDto).toList();
     }
+
+    public List<RequestDto> listAllByStatus(List<RequestStatus> statusList, Sort.Direction direction, String property) {
+        return repository.findAllByRequestStatusIn(statusList, Sort.by(direction, property)).stream().map(mapper::toDto).toList();
+    }
 }
