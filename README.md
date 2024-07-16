@@ -103,7 +103,3 @@ In the application there is also a [postman collection](https://github.com/icaru
 ## Swagger UI
 
 The application has the Swagger tool to document it. To access it, run the application and access the url: (http://localhost:8080/swagger-ui/index.html)
-
-In Swagger you can access all endpoints and generate requests:
-
-And on each endpoint, you can see the type of response you might receive:
