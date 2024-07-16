@@ -144,7 +144,7 @@ public class RequestController extends CrudController<RequestDto> {
     }
 
     @GetMapping("/my-requests")
-    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TEACHER')")
     public ResponseEntity<?> listTasksByUser(@RequestParam(name = "direction", defaultValue = "ASC") Sort.Direction direction,
                                              @RequestParam(name = "property", defaultValue = "requestDate") String property) {
         var user = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
