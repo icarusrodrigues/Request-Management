@@ -18,9 +18,9 @@ import java.util.UUID;
 public abstract class BaseEntity<T extends Number> implements Serializable, IPrePersist, IPreUpdate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected T id;
+    private T id;
 
-    protected String code;
+    private String code;
 
     @PrePersist
     public void prePersist() {

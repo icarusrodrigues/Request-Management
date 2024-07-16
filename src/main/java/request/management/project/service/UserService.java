@@ -46,9 +46,6 @@ public class UserService extends CrudService<UserDto, User> {
         if (dto.getEmail() == null)
             dto.setEmail(foundUser.getEmail());
 
-        if (dto.getPassword() == null)
-            dto.setPassword(foundUser.getPassword());
-
         if (dto.getName() == null)
             dto.setName(foundUser.getName());
 
@@ -64,7 +61,7 @@ public class UserService extends CrudService<UserDto, User> {
         if (dto.getRequests() == null)
             dto.setRequests(foundUser.getRequests());
 
-        return mapper.toDto(userRepository.save(mapper.toEntity(dto)));
+        return super.update(id, dto);
     }
 
     public UserDto findByUsername(String username) {

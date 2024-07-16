@@ -102,12 +102,16 @@ public class RequestController extends CrudController<RequestDto> {
         var loggedUser = userService.findByUsername(user.getUsername());
 
         if (loggedUser.getUserType().equals(UserType.TEACHER)) {
-            var foundRequest = requestService.find(id);
+            try {
+                var foundRequest = requestService.find(id);
 
-            if (foundRequest.getOwnerId().equals(loggedUser.getId())) {
-                return super.delete(id);
-            } else {
-                return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
+                if (foundRequest.getOwnerId().equals(loggedUser.getId())) {
+                    return super.delete(id);
+                } else {
+                    return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.DONT_HAVE_PERMISSION_MESSAGE.message());
+                }
+            } catch (NoSuchElementException ignored) {
+                return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
             }
         } else {
             return super.delete(id);
@@ -116,7 +120,7 @@ public class RequestController extends CrudController<RequestDto> {
 
     @PutMapping("/approve/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
-    public ResponseEntity<?> approveRequest(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> approveRequest(@PathVariable("id") Long id) {
         try {
             return ResponseHandler.generateResponse(ResponseEntity.ok(requestService.approveRequest(id)), EnumMessage.PUT_MESSAGE.message());
         } catch (NoSuchElementException ignored) {
@@ -128,7 +132,8 @@ public class RequestController extends CrudController<RequestDto> {
 
     @PutMapping("/disapprove/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
-    public ResponseEntity<?> disapproveRequest(@PathVariable(value = "id") Long id, @RequestBody DisapproveReason reason) {
+    public ResponseEntity<?> disapproveRequest(@PathVariable("id") Long id,
+                                               @RequestBody DisapproveReason reason) {
         try {
             return ResponseHandler.generateResponse(ResponseEntity.ok(requestService.disapproveRequest(id, reason)), EnumMessage.PUT_MESSAGE.message());
         } catch (NoSuchElementException ignored) {

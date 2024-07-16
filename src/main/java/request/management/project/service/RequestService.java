@@ -42,6 +42,7 @@ public class RequestService extends CrudService<RequestDto, Request> {
         dto.setId(id);
         dto.setRequestDate(foundRequest.getRequestDate());
         dto.setRequestStatus(foundRequest.getRequestStatus());
+        dto.setDisapproveReason(foundRequest.getDisapproveReason());
 
         if (dto.getArea() ==null)
             dto.setArea(foundRequest.getArea());
@@ -58,7 +59,7 @@ public class RequestService extends CrudService<RequestDto, Request> {
         if (dto.getOwnerId() == null)
             dto.setOwnerId(foundRequest.getOwnerId());
 
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        return super.update(id, dto);
     }
 
     @Transactional
@@ -75,7 +76,7 @@ public class RequestService extends CrudService<RequestDto, Request> {
 
         request.setRequestStatus(RequestStatus.APPROVED);
 
-        return update(id, request);
+        return super.update(id, request);
     }
 
     @Transactional
@@ -97,7 +98,7 @@ public class RequestService extends CrudService<RequestDto, Request> {
         request.setRequestStatus(RequestStatus.UNAPPROVED);
         request.setDisapproveReason(reason.getReason());
 
-        return mapper.toDto(repository.save(mapper.toEntity(request)));
+        return super.update(id, request);
     }
 
     public List<RequestDto> listAllByOwner(UserDto loggedUser, Sort.Direction direction, String property) {

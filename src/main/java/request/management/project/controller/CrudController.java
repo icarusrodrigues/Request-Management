@@ -2,8 +2,8 @@ package request.management.project.controller;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
@@ -34,8 +34,8 @@ public abstract class CrudController <T extends BaseDto<Long>> {
                                   @RequestParam(name = "property", defaultValue = "id") String property) {
         try {
             return ResponseHandler.generateResponse(ResponseEntity.ok(service.findAll(direction, property)), EnumMessage.GET_MESSAGE.message());
-        } catch (NoSuchElementException ignored) {
-            return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
+        } catch (PropertyReferenceException ignored) {
+            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), EnumMessage.PROPERTY_NOT_FOUND_MESSAGE.message());
         }
     }
 
@@ -68,9 +68,6 @@ public abstract class CrudController <T extends BaseDto<Long>> {
             return ResponseHandler.generateResponse(ResponseEntity.noContent().build(), EnumMessage.DELETE_MESSAGE.message());
         } catch (NoSuchElementException ignored) {
             return ResponseHandler.generateResponse(ResponseEntity.notFound().build(), EnumMessage.ENTITY_NOT_FOUND_MESSAGE.message());
-
-        } catch (DataIntegrityViolationException ignored){
-            return ResponseHandler.generateResponse(ResponseEntity.badRequest().build(), "The user is a team leader, change the leader(s) of that team(s) first.");
         }
     }
 }
